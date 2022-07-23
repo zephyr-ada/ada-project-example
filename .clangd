@@ -1,0 +1,4 @@
+CompileFlags:                     # Tweak the parse settings
+  Remove:
+    - -mfp16-format=*             # strip unsupported flag
+    - -fno-reorder-functions      # strip unsupported flag

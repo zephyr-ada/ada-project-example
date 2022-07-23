@@ -1,7 +1,8 @@
 // See https://aka.ms/vscode-remote/devcontainer.json for format details.
 {
-    "name": "Zephyr SDK ADA ARM",
-    "dockerFile": "../.gitpod.Dockerfile",
+    "name": "Zephyr SDK Ada",
+    "image": "ghcr.io/zephyr-ada/ada-project-example:master",
+    // "dockerFile": "../.gitpod.Dockerfile",
     // Add the IDs of any extensions you want installed in the array below.
     "extensions": [
 		"llvm-vs-code-extensions.vscode-clangd",
@@ -27,10 +28,10 @@
             }
         }
     },
-    // Cortex-debug plugin use ::1 ipv6 address so enable it 
     "runArgs": [
-        "--sysctl",
-        "net.ipv6.conf.all.disable_ipv6=0",
+        // Cortex-debug plugin use ::1 ipv6 address so enable it 
+        // "--sysctl",
+        // "net.ipv6.conf.all.disable_ipv6=0",
         // "-e", "DISPLAY=${localEnv:DISPLAY}",
         "-e", "DISPLAY=:0",
         "-v", "/tmp/.X11-unix:/tmp/.X11-unix"
