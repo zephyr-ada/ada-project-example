@@ -47,32 +47,8 @@ RUN apt-get update && \
     DEBIAN_FRONTEND=noninteractive \
     apt-get install -y \
         arm-zephyr-eabi \
-        cmake-ada
-
-# fix cmake_module paths
-RUN cd /opt/zephyr-sdk/cmake/zephyr \
-    && cp target.cmake target.cmake.bak \
-    && sed -i -e 's@set(SYSROOT_DIR   ${TOOLCHAIN_HOME}/${SYSROOT_TARGET}/${SYSROOT_TARGET})@set(SYSROOT_DIR   ${TOOLCHAIN_HOME}/${SYSROOT_TARGET})@' target.cmake \
-    && sed -i -e 's@set(CROSS_COMPILE ${TOOLCHAIN_HOME}/${CROSS_COMPILE_TARGET}/bin/${CROSS_COMPILE_TARGET}-)@set(CROSS_COMPILE ${TOOLCHAIN_HOME}/bin/${CROSS_COMPILE_TARGET}-)@' target.cmake
-
-SHELL ["/bin/bash", "-c"]
-
-# add compiler description for gprconfig
-RUN echo $'<?xml version="1.0" ?>\n\
-<gprconfig>\n\
-  <compiler_description>\n\
-    <name>GCC-ZEPHYR</name>\n\
-    <executable prefix="1">(.*-zephyr.*-)gnatbind</executable>\n\
-    <version>\n\
-      <external>${PREFIX}gnatbind -v --version</external>\n\
-      <grep regexp="^GNATBIND.+?(\d+(\.\d+){1,2})" group="1"></grep>\n\
-    </version>\n\
-    <languages>Ada</languages>\n\
-    <target>\n\
-      <external>${PREFIX}gcc -dumpmachine</external>\n\
-    </target>\n\
-  </compiler_description>\n\
-</gprconfig>' > /usr/share/gprconfig/compilers-zephyr.xml
+        cmake-ada \
+        gprconfig-kb-gnat-zephyr 
 
 # create user
 ARG USERNAME=developer
@@ -108,7 +84,7 @@ ENV PATH="/opt/SEGGER/JLink:${PATH}"
 ARG RENODE_VERSION=1.13.0
 
 # Install Renode
-RUN wget https://github.com/renode/renode/releases/download/v${RENODE_VERSION}/renode_${RENODE_VERSION}_amd64.deb && \
+RUN wget --progress=dot:giga https://github.com/renode/renode/releases/download/v${RENODE_VERSION}/renode_${RENODE_VERSION}_amd64.deb && \
     apt-get update && \
     apt-get install -y --no-install-recommends ./renode_${RENODE_VERSION}_amd64.deb python3-dev && \
     rm ./renode_${RENODE_VERSION}_amd64.deb && \
