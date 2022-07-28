@@ -2,6 +2,14 @@ project App is
    for Source_Dirs use ("src");
 
    for Languages use ("Ada");
-   for Runtime ("Ada") use "../modules/gnat";
    for Target use "arm-zephyr-eabi";
+   
+   for Runtime ("Ada") use "../modules/gnat";
+
+   for Library_Name use "ada_app";
+   for Library_Dir use "lib";
+
+   package Compiler is
+      for Default_Switches ("Ada") use ("-g3");
+   end Compiler;
 end App;
